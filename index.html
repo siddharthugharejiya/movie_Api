@@ -210,7 +210,8 @@
 <script>
   var add = () => {
     var ss = document.getElementById('s').value;
-    var url = `http://www.omdbapi.com/?s=${ss}&apikey=861f226`;
+  
+    var url = `https://www.omdbapi.com/?s=${ss}&apikey=861f226`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -225,7 +226,7 @@
           card.classList = "card w-100";
 
           var img = document.createElement('img');
-          img.src = movie.Poster !== "N/A" ? movie.Poster : "placeholder.jpg"; // Fallback for missing posters
+          img.src = movie.Poster !== "N/A" ? movie.Poster : "placeholder.jpg";
           img.classList = "img-fluid card-img-top";
 
           var div = document.createElement('div');
