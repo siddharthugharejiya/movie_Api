@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,15 +24,15 @@
     </div>
   </div>
 
-  <div class="container-fluid mt-4" >
+  <div class="container-fluid mt-4">
     <div class="container">
       <nav class="navbar navbar-expand-sm ">
         <div class="container-fluid">
           <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav m-auto mb-2 mb-lg-0">
               <li class="nav-item">
@@ -137,15 +139,15 @@
 
             </ul>
             <div class="container d-flex justify-content-center align-items-center">
-            <div id="m">
-            <form class="d-flex" >
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="s">
-              <div class="ic">
-                <i class="fa-solid fa-magnifying-glass" id="icon1" onclick="add()"></i>
+              <div id="m">
+                <form class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="s">
+                  <div class="ic">
+                    <i class="fa-solid fa-magnifying-glass" id="icon1" onclick="add()"></i>
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
           </div>
         </div>
       </nav>
@@ -168,7 +170,7 @@
   </div>
 
   <div class="container mt-3 d-flex justify-content-center" style="background: #333131; border-radius: 20px;">
-    
+
     <div class="multi">
       <div class="multiple">Dual Audio (Hindi) 720P</div>
       <div class="multiple">Hollywood movies 1080P</div>
@@ -195,44 +197,88 @@
     </div>
   </div>
   <div class="container">
+    <!-- Offcanvas -->
+    <div class="offcanvas fade" tabindex="-1" id="videoPlayer" aria-labelledby="videoPlayerLabel">
+      <div class="offcanvas-dialog modal-dialog-centered modal-lg">
+        <div class="offcanvas-content bg-dark text-white p-3 rounded">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="offcanvas-title" id="videoPlayerLabel">Watch Movie</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+              aria-label="Close"></button>
+          </div>
+          <div class="ratio ratio-16x9">
+            <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="main">
     </div>
   </div>
   <div class="container mt-3">
     <div class="footer">
-    <div class="logo1"><img src="img/vegav2.png" alt></div>
-   <p style="margin-bottom: 0px;">   Copyright © 2024. Created by Siddharth Ugharejiya </p>
-   <span>Contact Us | Request Us | DMCA | About Us | Sitemap</span>
+      <div class="logo1"><img src="img/vegav2.png" alt></div>
+      <p style="margin-bottom: 0px;"> Copyright © 2024. Created by Siddharth Ugharejiya </p>
+      <span>Contact Us | Request Us | DMCA | About Us | Sitemap</span>
     </div>
   </div>
+  <!-- Button trigger modal -->
+
+
+
+
 </body>
 
 <script>
   var add = () => {
     var ss = document.getElementById('s').value;
-  
+
     var url = `https://www.omdbapi.com/?s=${ss}&apikey=861f226`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
         document.getElementById('main').innerHTML = "";
         data.Search.forEach(movie => {
-
           var outerDiv = document.createElement('div');
-                                        
-          outerDiv.classList = "col-12 col-sm-7 col-md-6 col-lg-3 d-flex align-items-stretch mb-3";
+          outerDiv.className = "col-12 col-sm-7 col-md-6 col-lg-3 d-flex align-items-stretch mb-3";
 
           var card = document.createElement('div');
-          card.classList = "card w-100";
+          card.className = "card w-100";
 
           var img = document.createElement('img');
           img.src = movie.Poster !== "N/A" ? movie.Poster : "placeholder.jpg";
-          img.classList = "img-fluid card-img-top";
+          img.className = "img-fluid card-img-top";
 
           var div = document.createElement('div');
-          div.classList = "card-body text-center";
-          div.innerHTML = `<p><i class="fa-regular fa-calendar"></i> ${movie.Year}</p>
-            <h5>${movie.Title}</h5>`;
+          div.className = "card-body text-center";
+
+          var uniqueModalId = "modal_" + movie.imdbID;
+
+          div.innerHTML = `
+  <p><i class="fa-regular fa-calendar"></i> ${movie.Year}</p>
+  <h5>${movie.Title}</h5>
+    <div class="display-flex justify-content-center align-items-center">
+      <button type="button" class="btn watch-btn" data-bs-toggle="modal" data-bs-target="#${uniqueModalId}">
+        <i class="fa-solid fa-play"></i> Watch Now
+        </button>
+        </div>
+
+  <div class="modal fade" id="${uniqueModalId}" tabindex="-1" aria-labelledby="${uniqueModalId}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="${uniqueModalId}Label">${movie.Title}</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <iframe src="https://vidsrc.xyz/embed/movie/${movie.imdbID}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
 
           card.appendChild(img);
           card.appendChild(div);
@@ -241,8 +287,11 @@
         });
       })
       .catch(error => console.log('Error:', error));
+
     document.getElementById('s').value = "";
   }
 </script>
+
+
 
 </html>
